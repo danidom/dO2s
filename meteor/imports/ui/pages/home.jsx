@@ -15,13 +15,15 @@ export default class Home extends Component{
   render(){
     return(
       <div style={{display: 'flex', justifyContent: 'center'}}>
-        <PlayConfigMulticomponentWidget playStatus={1} playSpeed={1} onClick={()=>this.onClick()} />
+        <PlayConfigMulticomponentWidget topSpeed={10}/>
         {/* <PlayConfigWidgetSVG playStatus={1} playSpeed={1} onClick={this.funcTest}/> */}
 
-        <div className="playbackStatus">
+        {/* <div className="playbackStatus">
           <div id="playSettings">
             <p>Play status (-1 backward, 0 pause, 1 forward):
-              <span id="playStatus" style={{fontWeight: 'bolder'}}/>
+              <span style={{fontWeight: 'bolder'}}>
+                {t}
+              </span>
             </p>
             <p>Play speed (from -X to +X):
               <span id="playSpeed" style={{fontWeight: 'bolder'}}/>
@@ -31,7 +33,7 @@ export default class Home extends Component{
               <span id="currInstant" style={{fontWeight: 'bolder'}}/>
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       )
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackwardButton, PauseButton, ForwardButton, SpeedSlider } from './playback-widget-elements'
 
 export class PlayConfigWidgetSVG extends React.Component{
   constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
@@ -133,13 +132,155 @@ PlayConfigWidgetSVG.defaultProps = {
   playSpeed  : 1
 }
 
+// #############################################################################
+// #############################################################################
+// #############################################################################
+
+// 1
+export class BackwardButton extends React.Component {
+  constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
+    super(props);
+    this.state = { isSelected : false };
+  }
+
+  // <BACKBUTTON> onClick={()=>{this.prueba()}}
+  //  prueba(){
+  //    this.props.onClick(); // Este es el que llama al "prueba" del padre
+  //    console.log("Funciona");
+  //  }
+
+  // let isSelected = this.state.isSelected; // true or false
+
+  render(){
+    return(
+      <div>
+        <svg className="widgetButton"
+             onClick={()=>{this.props.onClick("back")}}
+             viewBox="0 0 10 10" width="100" height="100">
+          <path id="backButtonPath" d="M 2 5 L 8 8 L 8 2"/>
+        </svg>
+      </div>
+    )
+  }
+}
+// BackwardButton.defaultProps = {
+//   onClick: {()=>console.log("No acction was assigned for click.")}
+// }
+BackwardButton.propTypes = {
+  onCLick: PropTypes.func //.isRequired
+}
+
+// 2
+export class PauseButton extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { isSelected : false };
+  }
+  render(){
+    return(
+      <div>
+        <svg className="widgetButton"
+             onClick={()=>{this.props.onClick("pause")}}
+             viewBox="0 0 10 10" width="100" height="100">
+          <path id="pauseButtonPath" d="M2 2 L2 8 L4.4 8 L4.4 2 M5.6 2 L5.6 8 L8 8 L8 2 Z"/>
+        </svg>
+      </div>
+    )
+  }
+}
+PauseButton.propTypes = {
+  onCLick: PropTypes.func
+}
+
+// 3
+export class ForwardButton extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { isSelected : false };
+  }
+  render(){
+    return(
+      <div>
+        <svg className="widgetButton"
+             onClick={()=>{this.props.onClick("forward")}}
+             viewBox="0 0 10 10" width="100" height="100">
+          <path id="forwardButtonPath" d="M 2 2 L 8 5 L 2 8"/>
+        </svg>
+      </div>
+    )
+  }
+}
+ForwardButton.propTypes = {
+  onCLick: PropTypes.func
+}
+
+export class SpeedSlider extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { speedValue: 1 }; // definimos el estado en React
+    this.handleChange = this.handleChange.bind(this); // definimos un ¿método? -> qué hacer cuando hay un cambio
+  }
+
+  // function passValue() {
+  //   return this.state.speedValue;
+  // }
+
+  handleChange() {
+    this.setState({speedValue: event.target.value});
+    // var a = {value: event.target.value}
+    // console.log(a.value);
+  }
+
+  render(){
+    return(
+      <div>
+        <input type="range" id="speedSliderInput"
+          min={-this.props.topSpeed} max={this.props.topSpeed} // step="1"
+          value={this.state.value} // defaultValue={1}
+          onChange={this.handleChange}/>
+      </div>
+    )
+  }
+}
+SpeedSlider.propTypes = {
+  topSpeed: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired
+}
+SpeedSlider.defaultProps = {
+  topSpeed  : 32
+}
+
+
+// #############################################################################
+// #############################################################################
+// #############################################################################
+// #############################################################################
+// #############################################################################
+// #############################################################################
+// #############################################################################
+
+
 export class PlayConfigMulticomponentWidget extends React.Component{
   constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
     super(props);
+    this.state = {
+      playStatus: 1, // -1, 0 ó 1
+      playSpeed: 1
+    }
   }
 
   handleClick(buttonPar){
     console.log("Pressed "+buttonPar+"!");
+    // if (buttonName == "back") {
+    //   playStatus = -1;
+    //   console.log("Something worked in back");
+    // } else if (buttonName == "pause") {
+    //   playStatus = 0;
+    //   console.log("Something worked in pause");
+    // } else if (buttonName == "forward") {
+    //   playStatus = 1;
+    //   console.log("Something worked in forward");
+    // }
   }
 
   handleChange(value){
@@ -165,39 +306,39 @@ export class PlayConfigMulticomponentWidget extends React.Component{
       <div>
         <BackwardButton isSelected={false} onClick={ this.handleClick.bind(this) }/>
         <PauseButton    isSelected={false} onClick={ this.handleClick.bind(this) }/>
-        <ForwardButton  isSelected={false} onClick={ this.handleClick.bind(this) }/>
+        <ForwardButton  isSelected={false} />
         <SpeedSlider    topSpeed={10} handleChange={ this.handleChange.bind(this) }/>
+        <div>
+          <div>
+            <div>
+              <p>Play status (-1 backward, 0 pause, 1 forward):
+                <span style={{fontWeight: 'bolder'}}>
+                  {this.state.playStatus}
+                </span>
+              </p>
+              <p>Play speed (from -X to +X):
+                <span style={{fontWeight: 'bolder'}}>
+                  {this.state.playSpeed}
+                </span>
+              </p>
+              <p>Timeline:
+                <span style={{fontWeight: 'bolder'}}>
+
+                </span>, currently
+                <span style={{fontWeight: 'bolder'}}>
+
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       )
     }
 }
-PlayConfigMulticomponentWidget.propTypes = {
-  playStatus : PropTypes.number.isRequired,
-  playSpeed  : PropTypes.number.isRequired,
-  onCLick    : PropTypes.func
-}
 PlayConfigMulticomponentWidget.defaultProps = {
-  playStatus : 0,
-  playSpeed  : 1,
-  onClick    : actionUndefined()
+  topSpeed: 32,
 }
-
-
-function handleClick(buttonName) {
-  if (buttonName == "back") {
-    playStatus = -1;
-    console.log("Something worked in back");
-  } else if (buttonName == "pause") {
-    playStatus = 0;
-    console.log("Something worked in pause");
-  } else if (buttonName == "forward") {
-    playStatus = 1;
-    console.log("Something worked in forward");
-  }
-}
-
-function actionUndefined() {
-  return(
-    console.log("Undefined onClick action.")
-  )
+PlayConfigMulticomponentWidget.propTypes = {
+  topSpeed : PropTypes.number.isRequired
 }
