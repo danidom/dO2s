@@ -1,4 +1,6 @@
 .widgetButton {
+  background-color: lightgrey;
+  opacity: 0.5;
   display: inline-block;
   vertical-align: middle;
   backface-visibility: hidden;
@@ -11,6 +13,25 @@
   transform: scale(1.05);
 }
 .widgetButton:active {
+  transform: scale(0.9);
+  opacity: 1;
+}
+
+.selectedWidgetButton {
+  background-color: lightgrey;
+  display: inline-block;
+  vertical-align: middle;
+  transform: scale(1.05);
+  backface-visibility: hidden;
+  transition-duration: 0.2s;
+  transition-property: transform;
+}
+.selectedWidgetButton:hover {
+  cursor: pointer;
+  opacity: 0.9;
+  transform: scale(1);
+}
+.selectedWidgetButton:active {
   transform: scale(0.9);
   opacity: 1;
 }

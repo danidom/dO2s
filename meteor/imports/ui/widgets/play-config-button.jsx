@@ -143,6 +143,9 @@ export class BackPausePlay extends React.Component {
       isSelected   : "pause", // back, pause o play
       playStatus   : 0,       // -1, 0, 1 (respectivamente)
       prevSelected : "play",  // back, pause o play
+      backClass    : "widgetButton",
+      pauseClass   : "selectedWidgetButton",
+      playClass    : "widgetButton",
     };
     this.buttonClick = this.buttonClick.bind(this);
   }
@@ -154,7 +157,10 @@ export class BackPausePlay extends React.Component {
         this.setState({
           isSelected   : "pause",
           playStatus   : 0,
-          prevSelected : "back"
+          prevSelected : "back",
+          backClass    : "widgetButton",
+          pauseClass   : "selectedWidgetButton",
+          playClass    : "widgetButton",
         });
       }
       else {
@@ -162,7 +168,10 @@ export class BackPausePlay extends React.Component {
         this.setState({
           isSelected   : "back",
           playStatus   : -1,
-          prevSelected : prevSel
+          prevSelected : prevSel,
+          backClass    : "selectedWidgetButton",
+          pauseClass   : "widgetButton",
+          playClass    : "widgetButton",
         });
       }
       // Llamada a la función que atribuya en el parent.
@@ -177,14 +186,20 @@ export class BackPausePlay extends React.Component {
           this.setState({
             isSelected   : "back",
             playStatus   : -1,
-            prevSelected : "pause"
+            prevSelected : "pause",
+            backClass    : "selectedWidgetButton",
+            pauseClass   : "widgetButton",
+            playClass    : "widgetButton",
           });
         }
         else if (this.state.prevSelected=="play") {
           this.setState({
             isSelected   : "play",
             playStatus   : 1,
-            prevSelected : "pause"
+            prevSelected : "pause",
+            backClass    : "widgetButton",
+            pauseClass   : "widgetButton",
+            playClass    : "selectedWidgetButton",
           });
         }
       }
@@ -193,7 +208,10 @@ export class BackPausePlay extends React.Component {
         this.setState({
           isSelected   : "pause",
           playStatus   : 0,
-          prevSelected : prevSel
+          prevSelected : prevSel,
+          backClass    : "widgetButton",
+          pauseClass   : "selectedWidgetButton",
+          playClass    : "widgetButton",
         });
       }
       // Llamada a la función que atribuya en el parent.
@@ -207,7 +225,10 @@ export class BackPausePlay extends React.Component {
         this.setState({
           isSelected   : "pause",
           playStatus   : 0,
-          prevSelected : "play"
+          prevSelected : "play",
+          backClass    : "widgetButton",
+          pauseClass   : "selectedWidgetButton",
+          playClass    : "widgetButton",
         });
       }
       else {
@@ -215,7 +236,10 @@ export class BackPausePlay extends React.Component {
         this.setState({
           isSelected   : "play",
           playStatus   : 1,
-          prevSelected : prevSel
+          prevSelected : prevSel,
+          backClass    : "widgetButton",
+          pauseClass   : "widgetButton",
+          playClass    : "selectedWidgetButton",
         });
       }
       // Llamada a la función que atribuya en el parent.
@@ -223,7 +247,7 @@ export class BackPausePlay extends React.Component {
       console.log(logOutut);
     }
 
-    var action = "Algo ha ido bien.";
+    var action = "& ... ¡Algo ha ido bien!";
     this.props.onClick(action); // Este es el que llama la función designada en el padre.
   }
 
@@ -231,14 +255,14 @@ export class BackPausePlay extends React.Component {
     return (
       <div>
         <div>
-          <svg className="widgetButton"
+          <svg className={this.state.backClass}
                onClick={()=>{this.buttonClick("back")}}
                viewBox="0 0 10 10" width="100" height="100">
             <path id="backButtonPath" d="M 2 5 L 8 8 L 8 2"/>
           </svg>
         </div>
         <div>
-          <svg className="widgetButton"
+          <svg className={this.state.pauseClass}
                onClick={()=>{this.buttonClick("pause")}}
                viewBox="0 0 10 10" width="100" height="100">
             <path id="pauseButtonPath" d="M2 2 L2 8 L4.4 8 L4.4 2 M5.6 2 L5.6 8 L8 8 L8 2 Z"/>
@@ -297,7 +321,6 @@ SpeedSlider.propTypes = {
 SpeedSlider.defaultProps = {
   topSpeed  : 32
 }
-
 
 // #############################################################################
 // ##### Debajo está el widget completo para el control de la reproducción #####
