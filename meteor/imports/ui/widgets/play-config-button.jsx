@@ -151,12 +151,14 @@ export class BackPausePlay extends React.Component {
   }
 
   buttonClick(which) {
+
     // CLICK BACK
     if (which=="back") {
       if (this.state.isSelected=="back") {
+        var playStatus = 0;
         this.setState({
           isSelected   : "pause",
-          playStatus   : 0,
+          playStatus   : playStatus,
           prevSelected : "back",
           backClass    : "widgetButton",
           pauseClass   : "selectedWidgetButton",
@@ -164,7 +166,8 @@ export class BackPausePlay extends React.Component {
         });
       }
       else {
-        var prevSel = this.state.isSelected;
+        var prevSel = this.state.isSelected,
+            playStatus = -1;
         this.setState({
           isSelected   : "back",
           playStatus   : -1,
@@ -174,15 +177,13 @@ export class BackPausePlay extends React.Component {
           playClass    : "widgetButton",
         });
       }
-      // Llamada a la función que atribuya en el parent.
-      var logOutut = this.state;
-      console.log(logOutut);
     }
 
     // CLICK PAUSE
     else if (which=="pause") {
       if (this.state.isSelected=="pause") {
         if (this.state.prevSelected=="back") {
+          var playStatus = -1;
           this.setState({
             isSelected   : "back",
             playStatus   : -1,
@@ -193,6 +194,7 @@ export class BackPausePlay extends React.Component {
           });
         }
         else if (this.state.prevSelected=="play") {
+          var playStatus = 1;
           this.setState({
             isSelected   : "play",
             playStatus   : 1,
@@ -205,6 +207,7 @@ export class BackPausePlay extends React.Component {
       }
       else {
         var prevSel = this.state.isSelected;
+        var playStatus = 0;
         this.setState({
           isSelected   : "pause",
           playStatus   : 0,
@@ -214,14 +217,12 @@ export class BackPausePlay extends React.Component {
           playClass    : "widgetButton",
         });
       }
-      // Llamada a la función que atribuya en el parent.
-      var logOutut = this.state;
-      console.log(logOutut);
     }
 
     // CLICK PLAY
     else if (which=="play") {
       if (this.state.isSelected=="play") {
+        var playStatus = 0;
         this.setState({
           isSelected   : "pause",
           playStatus   : 0,
@@ -232,23 +233,23 @@ export class BackPausePlay extends React.Component {
         });
       }
       else {
-        var prevSel = this.state.isSelected;
+        var prevSel = this.state.isSelected,
+            playStatus = 1;
         this.setState({
           isSelected   : "play",
           playStatus   : 1,
-          prevSelected : prevSel,
+          prevSelected : this.state.isSelected,
           backClass    : "widgetButton",
           pauseClass   : "widgetButton",
           playClass    : "selectedWidgetButton",
         });
       }
-      // Llamada a la función que atribuya en el parent.
-      var logOutut = this.state;
-      console.log(logOutut);
     }
-
+    var logOutut = this.state;
+    console.log(logOutut);
+    
     var action = "& ... ¡Algo ha ido bien!";
-    this.props.onClick(action); // Este es el que llama la función designada en el padre.
+    this.props.onClick(action,playStatus); // Este es el que llama la función designada en el padre.
   }
 
   render() {
@@ -269,7 +270,7 @@ export class BackPausePlay extends React.Component {
           </svg>
         </div>
         <div>
-          <svg className="widgetButton"
+          <svg className={this.state.playClass}
                onClick={()=>{this.buttonClick("play")}}
                viewBox="0 0 10 10" width="100" height="100">
             <path id="forwardButtonPath" d="M 2 2 L 8 5 L 2 8"/>
@@ -330,14 +331,14 @@ export class PlayConfigMulticomponentWidget extends React.Component{
   constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
     super(props);
     this.state = {
-      playStatus: 1, // -1, 0 ó 1
-      playSpeed: 1
+      playStatus: 0, // -1, 0 ó 1
+      playSpeed: 1,
     }
   }
 
-  handleClick(buttonPar){
-    console.log("Pressed "+buttonPar+"!");
-
+  handleClick(logShit,playStatus){
+    console.log("Pressed "+logShit+"! Now playStatus="+playStatus);
+    this.setState({playStatus:playStatus});
   }
 
   handleChange(value){
