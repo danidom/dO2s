@@ -138,24 +138,27 @@ PlayConfigWidgetSVG.defaultProps = {
 
 // 1
 export class BackwardButton extends React.Component {
-  constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
+  constructor(props) { //instanciar la clase convertir la idea en objeto "real", crear un objeto
     super(props);
     this.state = { isSelected : false };
+    this.buttonClick = this.buttonClick.bind(this);
   }
 
-  // <BACKBUTTON> onClick={()=>{this.prueba()}}
-  //  prueba(){
-  //    this.props.onClick(); // Este es el que llama al "prueba" del padre
-  //    console.log("Funciona");
-  //  }
+  buttonClick(elevateParameter,selectionState) {
+    this.state.isSelected = !selectionState;
+    if (selectionState) {
+      elevateParameter = "pause";
+      this.props.onClick(elevateParameter); // Este es el que llama al "prueba" del padre
+    } else {
+      this.props.onClick(elevateParameter);
+    }
+  }
 
-  // let isSelected = this.state.isSelected; // true or false
-
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <svg className="widgetButton"
-             onClick={()=>{this.props.onClick("back")}}
+             onClick={()=>{this.buttonClick("back",this.state.isSelected)}}
              viewBox="0 0 10 10" width="100" height="100">
           <path id="backButtonPath" d="M 2 5 L 8 8 L 8 2"/>
         </svg>
@@ -164,7 +167,7 @@ export class BackwardButton extends React.Component {
   }
 }
 // BackwardButton.defaultProps = {
-//   onClick: {()=>console.log("No acction was assigned for click.")}
+//   onClick: {()=>console.log("No acction was assigned for click.")} // No funciona!
 // }
 BackwardButton.propTypes = {
   onCLick: PropTypes.func //.isRequired
@@ -175,12 +178,19 @@ export class PauseButton extends React.Component {
   constructor(props){
     super(props);
     this.state = { isSelected : false };
+    this.buttonClick = this.buttonClick.bind(this);
   }
+
+   buttonClick(elevateParameter,par2) {
+     this.props.onClick(elevateParameter);
+     // console.log(elevateParameter);
+   }
+
   render(){
     return(
       <div>
         <svg className="widgetButton"
-             onClick={()=>{this.props.onClick("pause")}}
+             onClick={()=>{this.buttonClick("pause")}}
              viewBox="0 0 10 10" width="100" height="100">
           <path id="pauseButtonPath" d="M2 2 L2 8 L4.4 8 L4.4 2 M5.6 2 L5.6 8 L8 8 L8 2 Z"/>
         </svg>
