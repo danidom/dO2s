@@ -136,32 +136,121 @@ PlayConfigWidgetSVG.defaultProps = {
 // #############################################################################
 // #############################################################################
 
-// 1
-export class BackwardButton extends React.Component {
+export class BackPausePlay extends React.Component {
   constructor(props) { //instanciar la clase convertir la idea en objeto "real", crear un objeto
     super(props);
-    this.state = { isSelected : false };
+    this.state = {
+      isSelected   : "pause", // back, pause o play
+      playStatus   : 0,       // -1, 0, 1 (respectivamente)
+      prevSelected : "play",  // back, pause o play
+    };
     this.buttonClick = this.buttonClick.bind(this);
   }
 
-  buttonClick(elevateParameter,selectionState) {
-    this.state.isSelected = !selectionState;
-    if (selectionState) {
-      elevateParameter = "pause";
-      this.props.onClick(elevateParameter); // Este es el que llama al "prueba" del padre
-    } else {
-      this.props.onClick(elevateParameter);
+  buttonClick(which) {
+    // CLICK BACK
+    if (which=="back") {
+      if (this.state.isSelected=="back") {
+        this.setState({
+          isSelected   : "pause",
+          playStatus   : 0,
+          prevSelected : "back"
+        });
+      }
+      else {
+        var prevSel = this.state.isSelected;
+        this.setState({
+          isSelected   : "back",
+          playStatus   : -1,
+          prevSelected : prevSel
+        });
+      }
+      // Llamada a la función que atribuya en el parent.
+      var logOutut = this.state;
+      console.log(logOutut);
     }
+
+    // CLICK PAUSE
+    else if (which=="pause") {
+      if (this.state.isSelected=="pause") {
+        if (this.state.prevSelected=="back") {
+          this.setState({
+            isSelected   : "back",
+            playStatus   : -1,
+            prevSelected : "pause"
+          });
+        }
+        else if (this.state.prevSelected=="play") {
+          this.setState({
+            isSelected   : "play",
+            playStatus   : 1,
+            prevSelected : "pause"
+          });
+        }
+      }
+      else {
+        var prevSel = this.state.isSelected;
+        this.setState({
+          isSelected   : "pause",
+          playStatus   : 0,
+          prevSelected : prevSel
+        });
+      }
+      // Llamada a la función que atribuya en el parent.
+      var logOutut = this.state;
+      console.log(logOutut);
+    }
+
+    // CLICK PLAY
+    else if (which=="play") {
+      if (this.state.isSelected=="play") {
+        this.setState({
+          isSelected   : "pause",
+          playStatus   : 0,
+          prevSelected : "play"
+        });
+      }
+      else {
+        var prevSel = this.state.isSelected;
+        this.setState({
+          isSelected   : "play",
+          playStatus   : 1,
+          prevSelected : prevSel
+        });
+      }
+      // Llamada a la función que atribuya en el parent.
+      var logOutut = this.state;
+      console.log(logOutut);
+    }
+
+    var action = "Algo ha ido bien.";
+    this.props.onClick(action); // Este es el que llama la función designada en el padre.
   }
 
   render() {
     return (
       <div>
-        <svg className="widgetButton"
-             onClick={()=>{this.buttonClick("back",this.state.isSelected)}}
-             viewBox="0 0 10 10" width="100" height="100">
-          <path id="backButtonPath" d="M 2 5 L 8 8 L 8 2"/>
-        </svg>
+        <div>
+          <svg className="widgetButton"
+               onClick={()=>{this.buttonClick("back")}}
+               viewBox="0 0 10 10" width="100" height="100">
+            <path id="backButtonPath" d="M 2 5 L 8 8 L 8 2"/>
+          </svg>
+        </div>
+        <div>
+          <svg className="widgetButton"
+               onClick={()=>{this.buttonClick("pause")}}
+               viewBox="0 0 10 10" width="100" height="100">
+            <path id="pauseButtonPath" d="M2 2 L2 8 L4.4 8 L4.4 2 M5.6 2 L5.6 8 L8 8 L8 2 Z"/>
+          </svg>
+        </div>
+        <div>
+          <svg className="widgetButton"
+               onClick={()=>{this.buttonClick("play")}}
+               viewBox="0 0 10 10" width="100" height="100">
+            <path id="forwardButtonPath" d="M 2 2 L 8 5 L 2 8"/>
+          </svg>
+        </div>
       </div>
     )
   }
@@ -169,59 +258,8 @@ export class BackwardButton extends React.Component {
 // BackwardButton.defaultProps = {
 //   onClick: {()=>console.log("No acction was assigned for click.")} // No funciona!
 // }
-BackwardButton.propTypes = {
+BackPausePlay.propTypes = {
   onCLick: PropTypes.func //.isRequired
-}
-
-// 2
-export class PauseButton extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = { isSelected : false };
-    this.buttonClick = this.buttonClick.bind(this);
-  }
-
-   buttonClick(elevateParameter,par2) {
-     this.props.onClick(elevateParameter);
-     // console.log(elevateParameter);
-   }
-
-  render(){
-    return(
-      <div>
-        <svg className="widgetButton"
-             onClick={()=>{this.buttonClick("pause")}}
-             viewBox="0 0 10 10" width="100" height="100">
-          <path id="pauseButtonPath" d="M2 2 L2 8 L4.4 8 L4.4 2 M5.6 2 L5.6 8 L8 8 L8 2 Z"/>
-        </svg>
-      </div>
-    )
-  }
-}
-PauseButton.propTypes = {
-  onCLick: PropTypes.func
-}
-
-// 3
-export class ForwardButton extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = { isSelected : false };
-  }
-  render(){
-    return(
-      <div>
-        <svg className="widgetButton"
-             onClick={()=>{this.props.onClick("forward")}}
-             viewBox="0 0 10 10" width="100" height="100">
-          <path id="forwardButtonPath" d="M 2 2 L 8 5 L 2 8"/>
-        </svg>
-      </div>
-    )
-  }
-}
-ForwardButton.propTypes = {
-  onCLick: PropTypes.func
 }
 
 export class SpeedSlider extends React.Component {
@@ -262,13 +300,8 @@ SpeedSlider.defaultProps = {
 
 
 // #############################################################################
+// ##### Debajo está el widget completo para el control de la reproducción #####
 // #############################################################################
-// #############################################################################
-// #############################################################################
-// #############################################################################
-// #############################################################################
-// #############################################################################
-
 
 export class PlayConfigMulticomponentWidget extends React.Component{
   constructor(props){ //instanciar la clase convertir la idea en objeto "real", crear un objeto
@@ -281,16 +314,7 @@ export class PlayConfigMulticomponentWidget extends React.Component{
 
   handleClick(buttonPar){
     console.log("Pressed "+buttonPar+"!");
-    // if (buttonName == "back") {
-    //   playStatus = -1;
-    //   console.log("Something worked in back");
-    // } else if (buttonName == "pause") {
-    //   playStatus = 0;
-    //   console.log("Something worked in pause");
-    // } else if (buttonName == "forward") {
-    //   playStatus = 1;
-    //   console.log("Something worked in forward");
-    // }
+
   }
 
   handleChange(value){
@@ -314,10 +338,8 @@ export class PlayConfigMulticomponentWidget extends React.Component{
 
     return(
       <div>
-        <BackwardButton isSelected={false} onClick={ this.handleClick.bind(this) }/>
-        <PauseButton    isSelected={false} onClick={ this.handleClick.bind(this) }/>
-        <ForwardButton  isSelected={false} />
-        <SpeedSlider    topSpeed={10} handleChange={ this.handleChange.bind(this) }/>
+        <BackPausePlay isSelected={false} onClick={ this.handleClick.bind(this) }/>
+        <SpeedSlider   topSpeed={10} handleChange={ this.handleChange.bind(this) }/>
         <div>
           <div>
             <div>
